@@ -1,0 +1,51 @@
+/*login: anwar027
+  date: 03/09/18
+  name: Muhammad Anwar
+*/
+
+#Purpose:
+ The purpose of the program is to calculate the total number of votes, 
+ from the input directory, and opening every votes.txt file if present 
+ and counting the votes. 
+ The result is stored in other files, which are read by other 
+ processes, until the final output file is created in the root 
+ directory. 
+
+#Compilation:
+ To compile the program all that needs to be done is to have all the 
+ *.c, the *.h files and the makefile in the same directory, 
+ then in the terminal use the command
+ "make", this will generate three executables, i.e. Leaf_Counter,
+ Aggregate_Votes, and Vote_Counter 
+
+#Execution:
+ After compilation by utilizing the makefile, just type ./Vote_Counter 
+ *, (where * would be the input path) in the terminal to run the program.
+ This will generate multiple files, within multiple directories. 
+ The final output file will be placed in the root directory and have a 
+ .txt extension.
+ If the command "make clean" is used in the terminal it will remove the executables.
+
+#Process:
+ The program uses parallelisation to execute multiple processes at once,
+ this is done by going thorugh multiple directories and accumulating the results of
+ votes.txt in other files that are convieniently placed in the subdirectories of the 
+ same name. 
+ To differentiate between leaf nodes and non leaf nodes, we check whether there 
+ are other subdirectories within the directory or not, if not then we look for
+ votes.txt, and if found run Leaf_Counter on it to generate the output file in the same
+ directory.
+ This process is repeated multiple times with the help of execs and forks that ensure
+ that all the directories and subdirectories are visited and contain output. 
+ Aggregate_Votes is in charge of adding all the votes in multiple output files and 
+ saving its output in the correct directory.
+ The main job of Vote_Counter is to call Aggregate_Votes, and then to check what
+ candidate had the most votes, and add the name to the final output file.
+
+ Error Checking has been implemented in the program and the codes are listed below:
+
+    exit 01: Leaf counter executed on a non leaf node 
+    exit 02: malloc failed
+    exit 03: fork failed
+    exit 04: exec fails
+    exit 05: empty votes.txt file
