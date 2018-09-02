@@ -1,0 +1,82 @@
+/*login: anwar027
+  date: 04/28/18
+  name: Muhammad Anwar
+*/
+
+#Purpose:
+ The purpose of the program is to calculate the total number of votes, 
+ from the input directory. The program relies on a client server relationship
+ to achieve this. The client passes the data using commands to the server and 
+ the server returns statuses and data depending on whether the command 
+ was completed. 
+
+#Compilation:
+ To compile the program all that needs to be done is to have all the 
+ *.c, the *.h files and the makefile in the same directory, 
+ then in the terminal use the command
+ "make", this will generate two executables; "server" and "client" 
+
+#Execution:
+ After compilation by utilizing the makefile, just type ./server 
+ followed by two arguments separated by a space, the first being the 
+ DAG document that will contain a list of the nodes and the dependencies,
+ the second argument will be the Port number that the server will have.
+ 
+ For the client, just type ./client followed by three arguments, the first 
+ being the input file with a list of all the commands to be executed. The 
+ second would be the IP address of the server i.e. where the server is running
+ and the third would be the port number to connec to.
+
+ The server and the client can be run on the same machine or on different ones
+ if need be. Depending on either case the IP address specified during the 
+ execution of the client will change, 127.0.0.1 for a local server i.e. on
+ the same machine, otherwise you could run "ifconfig" on the machine 
+ where the server is running and copy the "inet addr" info, as the IP 
+ to specify. 
+ If the command "make clean" is used in the terminal it will remove the executable.
+
+#Process:
+  The Server:
+    The server uses the DAG file to create a dependency tree, and initializes
+    it. The structure contains a list of nodes, each node has a name, a list
+    of its children, the index of its parent, and a list of the votes for it. 
+    The server uses threads to execute the requests of the client. Opens a 
+    socket, and waits for a client to connect. When a connection is found
+    the request is translated into multiple pieces and processed, then a 
+    code is returned to the client, either with data or without depending
+    on the situtation. The server consistently awaits new connections.
+
+  The Client:
+    The client creates takes in the input req file, opens it and translates 
+    the commands to create a request. The client mathces the commands and the
+    number of arguments they provide against specific cases to determine 
+    whether the command is correct, if so the command is used to create a 
+    request, and the files associated with the command are opened and the data
+    extracted. The client ensures the connection to the server and passes the 
+    request and awaits a response, and displays it to the user. Once all the 
+    commands in the file have been executed or denied the client is done. 
+ 
+ Error Checking has been implemented in the program and the codes are listed below:
+
+    exit 00: Malformed command (Client)
+    exit 01: Executalbe usage error (Client + Server)
+    exit 02: Fail to accept client socket (Server)
+    exit 03: Invalid Command from file (Client)
+    exit 04: Malloc failed 
+    exit 05: Failed to lock
+    exit 06: Failed to unlock
+    exit 07: Critical Error, invalid command from file (Client)
+    exit 08: Failed to fopen
+    exit 09: Failed to destroy locks 
+
+ #Other Notes:
+  The client is using a linked list to contain the names of the candidates and 
+  the vote counts for each.
+  The server side is using an array of a node struct. The node in the array
+  represents the region and has information about its parent index, a list of 
+  its children's indices, the total number of its children, and the linked 
+  list to hold the candidates and their votes. 
+
+  The trimwhitespace function used was developed by the 4061 staff.
+  There are two *.h helper files for the client and server side *.c files
+  respectively.
