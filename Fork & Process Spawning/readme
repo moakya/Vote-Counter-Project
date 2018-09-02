@@ -1,0 +1,50 @@
+#Names & x500: 
+ Muhammad Osamah Anwar      ~     anwar027
+
+#Purpose:
+ The purpose of the program is to calculate the total number of votes, 
+ from the input files by counting the individual candidate name occurances.
+ These votes are read from multiple files, and the result stored in other
+ files, which are read by other processes, until the final output file is
+ created. 
+
+#Compilation:
+ To compile the program all that needs to be done is to have the votecounter.c
+ and the makefile in the same directory, then in the terminal use the command
+ "make", this will generate the executable named "votecounter". 
+
+#Execution:
+ After compilation by utilizing the makefile, just type ./votecounter *, 
+ (where * would be the input file name) in the terminal to run the program
+ with that file. This will generate multiple files, that will convert individual
+ outputs. The final output file will be called, "Output_Who_Won".
+ If the command "make clean" is used in the terminal it will remove the executable
+ and all the output files including the "Output_Who_Won" file, if the program
+ hasn't been run yet and make clean command is used after compilation, it will
+ throw an error in the terminal that states that no Output_* files were found
+ in the directory.
+
+#Process:
+ The program uses parallelisation to execute multiple processes at once,
+ this is accomplished by utilizing a dependency array structure that can be
+ represented as a tree. The leaf nodes are executed first, and then we work
+ our way up to the root node. The input file is parsed first and stored in 
+ an array of struct Node, after which each node is processed to be considered,
+ either as a leaf node, a node leaf node, or a root node. And depending on the 
+ heirarchy, the nodes processes are executed in order, it always begins with the
+ root node that forks mulitple processes, and keeps going until all its children
+ nodes have been processes, this is done by ultilizing wait. This entire process is 
+ recursive, thus when the results rollback, we execute the parent nodes in order. 
+ Error Checking has been implemented in the program and the codes are listed below:
+
+    exit 01: cycle detected
+    exit 02: no root node
+    exit 03: cannot find node; malformed tree
+    exit 04: cannot open input file
+    exit 05: node name does not have an alpha character
+    exit 06: node name contains a non-alphanumeric character
+    exit 07: Malloc Error
+    exit 08: Execv fail
+    exit 09: fork fail
+    exit 10: first line must start with a number
+    exit 11: wait error
